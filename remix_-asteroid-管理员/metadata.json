@@ -1,0 +1,8 @@
+{
+  "name": "Remix: Asteroid 管理员",
+  "description": "极简主义风格的 Asteroid 云计算与开发代理控制面板",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

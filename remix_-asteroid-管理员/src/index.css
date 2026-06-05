@@ -1,0 +1,254 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+:root {
+  --brand-bg: #f9f9f8;
+  --brand-surface: #f9f9f8;
+  --brand-surface-dim: #dadad9;
+  --brand-surface-bright: #f9f9f8;
+  --brand-surface-lowest: #ffffff;
+  --brand-surface-low: #f3f4f3;
+  --brand-surface-container: #eeeeed;
+  --brand-surface-high: #e8e8e7;
+  --brand-surface-highest: #e2e2e2;
+  --brand-on-surface: #1a1c1c;
+  --brand-on-surface-variant: #444748;
+  --brand-inverse-surface: #2f3130;
+  --brand-inverse-on-surface: #f1f1f0;
+  --brand-outline: #747878;
+  --brand-outline-variant: #c4c7c7;
+  --brand-tint: #5f5e5e;
+  --brand-primary: #000000;
+  --brand-on-primary: #ffffff;
+  --brand-primary-container: #1c1b1b;
+  --brand-on-primary-container: #858383;
+  --brand-inverse-primary: #c9c6c5;
+  --brand-secondary: #006b5b;
+  --brand-on-secondary: #ffffff;
+  --brand-secondary-container: #52f8d8;
+  --brand-on-secondary-container: #00705f;
+  --brand-error: #ba1a1a;
+  --brand-on-error: #ffffff;
+  --brand-pro-teal: #2de1c2;
+}
+
+.dark {
+  --brand-bg: #0c0d0d;
+  --brand-surface: #121313;
+  --brand-surface-dim: #1e2020;
+  --brand-surface-bright: #1c1d1d;
+  --brand-surface-lowest: #0e0f0f;
+  --brand-surface-low: #151717;
+  --brand-surface-container: #1a1c1c;
+  --brand-surface-high: #222424;
+  --brand-surface-highest: #2a2c2c;
+  --brand-on-surface: #f0f1f1;
+  --brand-on-surface-variant: #a4a7a7;
+  --brand-inverse-surface: #e2e2e2;
+  --brand-inverse-on-surface: #1a1c1c;
+  --brand-outline: #8e9191;
+  --brand-outline-variant: #2f3130;
+  --brand-tint: #a3a6a6;
+  --brand-primary: #ffffff;
+  --brand-on-primary: #000000;
+  --brand-primary-container: #eeeeed;
+  --brand-on-primary-container: #1a1c1c;
+  --brand-inverse-primary: #3d3e3e;
+  --brand-secondary: #2de1c2;
+  --brand-on-secondary: #00382e;
+  --brand-secondary-container: #004d41;
+  --brand-on-secondary-container: #2de1c2;
+  --brand-error: #ffb4ab;
+  --brand-on-error: #690005;
+  --brand-pro-teal: #2de1c2;
+}
+
+@theme {
+  --font-sans: "Inter", "PingFang SC", "Microsoft YaHei", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Custom Color Palette from design specs */
+  --color-brand-bg: var(--brand-bg);
+  --color-brand-surface: var(--brand-surface);
+  --color-brand-surface-dim: var(--brand-surface-dim);
+  --color-brand-surface-bright: var(--brand-surface-bright);
+  --color-brand-surface-lowest: var(--brand-surface-lowest);
+  --color-brand-surface-low: var(--brand-surface-low);
+  --color-brand-surface-container: var(--brand-surface-container);
+  --color-brand-surface-high: var(--brand-surface-high);
+  --color-brand-surface-highest: var(--brand-surface-highest);
+  
+  /* Additional aliased variations used in components */
+  --color-brand-surface-container-highest: var(--brand-surface-highest);
+  --color-brand-surface-container-high: var(--brand-surface-high);
+  --color-brand-surface-container-low: var(--brand-surface-low);
+  --color-brand-surface-container-lowest: var(--brand-surface-lowest);
+  
+  --color-brand-on-surface: var(--brand-on-surface);
+  --color-brand-on-surface-variant: var(--brand-on-surface-variant);
+  --color-brand-inverse-surface: var(--brand-inverse-surface);
+  --color-brand-inverse-on-surface: var(--brand-inverse-on-surface);
+  --color-brand-outline: var(--brand-outline);
+  --color-brand-outline-variant: var(--brand-outline-variant);
+  --color-brand-tint: var(--brand-tint);
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-on-primary: var(--brand-on-primary);
+  --color-brand-primary-container: var(--brand-primary-container);
+  --color-brand-on-primary-container: var(--brand-on-primary-container);
+  --color-brand-inverse-primary: var(--brand-inverse-primary);
+  --color-brand-secondary: var(--brand-secondary);
+  --color-brand-on-secondary: var(--brand-on-secondary);
+  --color-brand-secondary-container: var(--brand-secondary-container);
+  --color-brand-on-secondary-container: var(--brand-on-secondary-container);
+  --color-brand-error: var(--brand-error);
+  --color-brand-on-error: var(--brand-on-error);
+  --color-brand-pro-teal: var(--brand-pro-teal);
+}
+
+/* Helper rules to instantly style standard Light-Mode utilities in Dark Theme */
+.dark body {
+  background-color: var(--brand-bg);
+  color: var(--brand-on-surface);
+}
+
+.dark .bg-white {
+  background-color: var(--brand-surface-lowest) !important;
+}
+
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5,
+.dark h6 {
+  color: var(--brand-on-surface) !important;
+}
+
+.dark.min-h-screen {
+  background-color: var(--brand-bg);
+}
+
+/* Dynamic global border replacements for dark mode */
+.dark .border {
+  border-color: var(--brand-outline-variant) !important;
+}
+
+.dark .border-t {
+  border-top-color: var(--brand-outline-variant) !important;
+}
+
+.dark .border-b {
+  border-bottom-color: var(--brand-outline-variant) !important;
+}
+
+.dark .border-l {
+  border-left-color: var(--brand-outline-variant) !important;
+}
+
+.dark .border-r {
+  border-right-color: var(--brand-outline-variant) !important;
+}
+
+.dark .divide-y > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--brand-outline-variant) !important;
+}
+
+.dark .border-\[\#EAEAE8\] {
+  border-color: var(--brand-outline-variant) !important;
+}
+
+.dark .border-b-\[\#EAEAE8\] {
+  border-color: var(--brand-outline-variant) !important;
+}
+
+.dark .divide-\[\#EAEAE8\] > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--brand-outline-variant) !important;
+}
+
+/* Dynamic background adaptations for neutral/zinc patterns */
+.dark .bg-neutral-50, 
+.dark .bg-zinc-50, 
+.dark .hover\:bg-neutral-50:hover, 
+.dark .hover\:bg-zinc-50:hover {
+  background-color: var(--brand-surface-low) !important;
+}
+
+.dark .bg-neutral-100, 
+.dark .bg-zinc-100,
+.dark .hover\:bg-neutral-100:hover, 
+.dark .hover\:bg-zinc-100:hover {
+  background-color: var(--brand-surface-container) !important;
+}
+
+.dark .text-black, .dark .text-neutral-900, .dark .text-zinc-900 {
+  color: var(--brand-on-surface) !important;
+}
+
+.dark .text-zinc-500, .dark .text-neutral-500, .dark .text-\[\#444748\] {
+  color: var(--brand-on-surface-variant) !important;
+}
+
+.dark .text-zinc-400, .dark .text-neutral-400, .dark .text-brand-outline {
+  color: var(--brand-outline) !important;
+}
+
+.dark input, .dark select, .dark textarea {
+  background-color: var(--brand-surface-low) !important;
+  color: var(--brand-on-surface) !important;
+  border-color: var(--brand-outline-variant) !important;
+}
+
+.dark input::placeholder, .dark textarea::placeholder {
+  color: var(--brand-on-surface-variant) !important;
+  opacity: 0.6;
+}
+
+.dark .shadow-sm, .dark .shadow-md, .dark .shadow-lg, .dark .shadow-xl {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.45), 0 2px 4px -1px rgba(0, 0, 0, 0.35) !important;
+}
+
+.dark header {
+  background-color: rgba(14, 15, 15, 0.8) !important;
+  border-color: var(--brand-outline-variant) !important;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6.5px;
+  height: 6.5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--brand-surface-dim);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--brand-outline);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #2a2c2c;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #3d3e3e;
+}
+
+/* Enter state transitions */
+.fade-in {
+  animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
