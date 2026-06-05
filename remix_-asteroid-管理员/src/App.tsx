@@ -117,6 +117,35 @@ export default function App() {
     }
   }, [notification]);
 
+  useEffect(() => {
+    const isAdmin = (email: string) => {
+      const normalized = email.toLowerCase();
+      return normalized === 'architect@asteroid.sh' || 
+             normalized.includes('admin') || 
+             normalized.includes('support') || 
+             normalized.includes('agent');
+    };
+
+    if (loggedIn && !isAdmin(userEmail)) {
+      const script = document.createElement('script');
+      script.src = '/chat-widget.js';
+      script.id = 'chat-widget-script';
+      script.async = true;
+      document.body.appendChild(script);
+
+      return () => {
+        const existingScript = document.getElementById('chat-widget-script');
+        if (existingScript) {
+          existingScript.remove();
+        }
+        const widgetContainer = document.getElementById('asteroid-chat-widget');
+        if (widgetContainer) {
+          widgetContainer.remove();
+        }
+      };
+    }
+  }, [loggedIn, userEmail]);
+
   const triggerSsoOAuth = (domain: string) => {
     const isSsoEnabled = localStorage.getItem('asteroid-sso-enabled') === 'true';
     if (!isSsoEnabled) {

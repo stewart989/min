@@ -35,6 +35,14 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ activeTab, setActiveTab, currentPlan, onLogout, userEmail, onReturnToAgent }: SidebarProps) {
+  const isAdmin = (email: string) => {
+    const normalized = email.toLowerCase();
+    return normalized === 'architect@asteroid.sh' || 
+           normalized.includes('admin') || 
+           normalized.includes('support') || 
+           normalized.includes('agent');
+  };
+
   const menuItems = [
     { id: 'overview' as ActiveTab, label: '首页', icon: Home },
     { id: 'settings' as ActiveTab, label: '设置', icon: Settings },
@@ -47,7 +55,10 @@ export default function Sidebar({ activeTab, setActiveTab, currentPlan, onLogout
     { id: 'usage' as ActiveTab, label: '用量', icon: BarChart3 },
     { id: 'billing' as ActiveTab, label: '支出', icon: DollarSign },
     { id: 'checkout' as ActiveTab, label: '账单', icon: Receipt },
-    { id: 'support' as ActiveTab, label: '在线客服', icon: MessageSquare },
+    ...(isAdmin(userEmail) 
+      ? [{ id: 'support' as ActiveTab, label: '在线客服', icon: MessageSquare }]
+      : [{ id: 'contact-support' as any, label: '联系客服', icon: MessageSquare }]
+    )
   ];
 
   return (
@@ -74,10 +85,10 @@ export default function Sidebar({ activeTab, setActiveTab, currentPlan, onLogout
             </div>
           </div>
         </div>
-
+ 
         {/* Selection Divider */}
         <div className="h-px bg-[#EAEAE8] mx-4 my-2.5" />
-
+ 
         {/* Navigation Items */}
         <nav className="px-3 space-y-0.5">
           {menuItems.map((item) => {
@@ -87,7 +98,18 @@ export default function Sidebar({ activeTab, setActiveTab, currentPlan, onLogout
               <button
                 key={item.id}
                 id={`sidebar-tab-${item.id}`}
-                onClick={() => setActiveTab(item.id)}
+                onClick={() => {
+                  if (item.id === 'contact-support') {
+                    const btn = document.querySelector('.asteroid-chat-btn') as HTMLButtonElement | null;
+                    if (btn) {
+                      btn.click();
+                    } else {
+                      alert('正在建立与客服的安全连接，请稍候重试...');
+                    }
+                  } else {
+                    setActiveTab(item.id as ActiveTab);
+                  }
+                }}
                 className={`w-full flex items-center gap-2.5 px-3 py-1.5 rounded-md text-left transition-all duration-200 ${
                   isActive
                     ? 'bg-brand-surface-container-highest text-brand-on-surface font-medium border-l-[3px] border-brand-primary'
