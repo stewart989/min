@@ -14,7 +14,8 @@ export type ActiveTab =
   | 'members' 
   | 'usage' 
   | 'billing' 
-  | 'checkout';
+  | 'checkout'
+  | 'support';
 
 export interface GuideStep {
   id: string;

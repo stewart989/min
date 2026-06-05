@@ -33,6 +33,7 @@ import BillingTab from './components/BillingTab';
 import CheckoutTab from './components/CheckoutTab';
 import AgentWorkspace from './components/AgentWorkspace';
 import VoiceController from './components/VoiceController';
+import SupportTab from './components/SupportTab';
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(true);
@@ -268,6 +269,12 @@ export default function App() {
             setPaymentMethod={setPaymentMethod}
           />
         );
+      case 'support':
+        return (
+          <SupportTab 
+            onShowNotification={showNotification} 
+          />
+        );
       default:
         return (
           <div className="p-8 text-center bg-white rounded border border-[#EAEAE8]">
@@ -290,7 +297,8 @@ export default function App() {
       members: '协作组织席位',
       usage: '服务资源用量统计',
       billing: '月度支出流水明细',
-      checkout: '账单结账明细'
+      checkout: '账单结账明细',
+      support: '在线客服咨询'
     };
     return mappings[tab] || '未注册状态';
   };

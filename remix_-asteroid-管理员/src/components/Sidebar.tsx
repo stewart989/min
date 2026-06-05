@@ -20,7 +20,8 @@ import {
   LogOut,
   ChevronLeft,
   BookOpen,
-  ExternalLink
+  ExternalLink,
+  MessageSquare
 } from 'lucide-react';
 import { ActiveTab } from '../types';
 
@@ -46,6 +47,7 @@ export default function Sidebar({ activeTab, setActiveTab, currentPlan, onLogout
     { id: 'usage' as ActiveTab, label: '用量', icon: BarChart3 },
     { id: 'billing' as ActiveTab, label: '支出', icon: DollarSign },
     { id: 'checkout' as ActiveTab, label: '账单', icon: Receipt },
+    { id: 'support' as ActiveTab, label: '在线客服', icon: MessageSquare },
   ];
 
   return (
