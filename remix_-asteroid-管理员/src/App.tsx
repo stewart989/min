@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { 
   Bell, 
   HelpCircle, 
@@ -18,22 +18,24 @@ import {
 } from 'lucide-react';
 import { ActiveTab } from './types';
 
-// Component imports
+// 常驻组件（直接导入）
 import Sidebar from './components/Sidebar';
-import OverviewTab from './components/OverviewTab';
-import SettingsTab from './components/SettingsTab';
-import CloudTab from './components/CloudTab';
-import DebugTab from './components/DebugTab';
-import PluginsTab from './components/PluginsTab';
-import IntegrationsTab from './components/IntegrationsTab';
-import ApiKeysTab from './components/ApiKeysTab';
-import MembersTab from './components/MembersTab';
-import UsageTab from './components/UsageTab';
-import BillingTab from './components/BillingTab';
-import CheckoutTab from './components/CheckoutTab';
-import AgentWorkspace from './components/AgentWorkspace';
 import VoiceController from './components/VoiceController';
-import SupportTab from './components/SupportTab';
+
+// 各面板按需懒加载（首屏只下载当前面板）
+const OverviewTab     = lazy(() => import('./components/OverviewTab'));
+const SettingsTab     = lazy(() => import('./components/SettingsTab'));
+const CloudTab        = lazy(() => import('./components/CloudTab'));
+const DebugTab        = lazy(() => import('./components/DebugTab'));
+const PluginsTab      = lazy(() => import('./components/PluginsTab'));
+const IntegrationsTab = lazy(() => import('./components/IntegrationsTab'));
+const ApiKeysTab      = lazy(() => import('./components/ApiKeysTab'));
+const MembersTab      = lazy(() => import('./components/MembersTab'));
+const UsageTab        = lazy(() => import('./components/UsageTab'));
+const BillingTab      = lazy(() => import('./components/BillingTab'));
+const CheckoutTab     = lazy(() => import('./components/CheckoutTab'));
+const AgentWorkspace  = lazy(() => import('./components/AgentWorkspace'));
+const SupportTab      = lazy(() => import('./components/SupportTab'));
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(true);
@@ -610,18 +612,20 @@ export default function App() {
 
   if (isAgentMode) {
     return (
-      <AgentWorkspace 
-        onShowNotification={showNotification}
-        userEmail={userEmail}
-        currentPlan={currentPlan}
-        onNavigateToConsole={(tab) => {
-          setIsAgentMode(false);
-          if (tab) {
-            setActiveTab(tab as any);
-          }
-        }}
-        onLogout={handleLogout}
-      />
+      <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-sm text-zinc-400">加载中…</div>}>
+        <AgentWorkspace 
+          onShowNotification={showNotification}
+          userEmail={userEmail}
+          currentPlan={currentPlan}
+          onNavigateToConsole={(tab) => {
+            setIsAgentMode(false);
+            if (tab) {
+              setActiveTab(tab as any);
+            }
+          }}
+          onLogout={handleLogout}
+        />
+      </Suspense>
     );
   }
 
@@ -768,7 +772,9 @@ export default function App() {
         {/* 4. Core Dynamic Panels Container with custom breathing margins */}
         <main className="flex-1 p-4 sm:p-6">
           <div className="max-w-5xl mx-auto w-full">
-            {renderActiveTabContent()}
+            <Suspense fallback={<div className="p-8 text-sm text-zinc-400">加载中…</div>}>
+              {renderActiveTabContent()}
+            </Suspense>
           </div>
         </main>
       </div>
