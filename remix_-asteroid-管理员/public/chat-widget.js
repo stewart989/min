@@ -379,11 +379,8 @@
 
   // Configuration for API Connection
   const CONFIG = {
-    API_URL: window.location.origin.includes('localhost')
-      ? 'http://localhost:3000/api/chat'
-      : '/api/chat'
-  };
-
+  API_URL: window.ASTEROID_CHAT_API || '/api/chat'
+};
   // Generate / Retrieve unique sessionToken
   let sessionToken = localStorage.getItem('asteroid_chat_session');
   if (!sessionToken) {
