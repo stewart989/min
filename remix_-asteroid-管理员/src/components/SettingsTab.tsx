@@ -70,7 +70,9 @@ export default function SettingsTab({
   const [ssoProvider, setSsoProvider] = useState(() => localStorage.getItem('asteroid-sso-provider') || 'okta');
   const [ssoIssuer, setSsoIssuer] = useState(() => localStorage.getItem('asteroid-sso-issuer') || 'https://asteroid-corp.okta.com/oauth2/default');
   const [ssoClientId, setSsoClientId] = useState(() => localStorage.getItem('asteroid-sso-client-id') || '0oa8v3y1m9kKxyz');
-  const [ssoClientSecret, setSsoClientSecret] = useState(() => localStorage.getItem('asteroid-sso-client-secret') || 'sb_sec_0oa8v3y1m9kKxyz77291a');
+  // 安全：客户端密钥不预置、不写入 localStorage（防明文泄露）。仅内存暂存；生产应提交服务端加密保管。
+  const [ssoClientSecret, setSsoClientSecret] = useState('');
+  const [ssoSecretConfigured, setSsoSecretConfigured] = useState(() => localStorage.getItem('asteroid-sso-secret-set') === 'true');
   const [ssoEnforced, setSsoEnforced] = useState(() => localStorage.getItem('asteroid-sso-enforced') === 'true');
   const ssoRedirectUri = 'https://asteroid.sh/api/auth/sso/callback';
 
@@ -215,21 +217,18 @@ export default function SettingsTab({
               <span className="text-xs font-sans text-brand-on-surface mr-4">部署失败时通过 Toast 弹窗通知</span>
               <div
                 onClick={() => {
-                  const currentNotify = localStorage.getItem('asteroid-notify-deploy-fail') === 'true';
-                  const nextVal = !currentNotify;
+                  const nextVal = !notifyOnDeployFail;
                   localStorage.setItem('asteroid-notify-deploy-fail', String(nextVal));
-                  onShowNotification(nextVal ? '已开启部署失败 Toast 告警功能' : '已关闭部署失败告警', 'info');
-                  // Trigger a re-render by using a local state if needed, but for now we expect page refresh or props.
-                  // Since we are in SettingsTab, we can use a local state.
                   setNotifyOnDeployFail(nextVal);
+                  onShowNotification(nextVal ? '已开启部署失败 Toast 告警功能' : '已关闭部署失败告警', 'info');
                 }}
                 className={`relative inline-flex h-5 w-10 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-                  localStorage.getItem('asteroid-notify-deploy-fail') === 'true' ? 'bg-[#2DE1C2]' : 'bg-zinc-200'
+                  notifyOnDeployFail ? 'bg-[#2DE1C2]' : 'bg-zinc-200'
                 }`}
               >
                 <span
                   className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
-                    localStorage.getItem('asteroid-notify-deploy-fail') === 'true' ? 'translate-x-5' : 'translate-x-0'
+                    notifyOnDeployFail ? 'translate-x-5' : 'translate-x-0'
                   }`}
                 />
               </div>
@@ -901,11 +900,9 @@ export default function SettingsTab({
                   type="password"
                   disabled={!ssoEnabled}
                   value={ssoClientSecret}
-                  onChange={(e) => {
-                    setSsoClientSecret(e.target.value);
-                    localStorage.setItem('asteroid-sso-client-secret', e.target.value);
-                  }}
-                  placeholder="••••••••••••••••"
+                  onChange={(e) => setSsoClientSecret(e.target.value)}
+                  placeholder={ssoSecretConfigured ? '已配置 ••••••（如需更换请重新输入）' : '输入 Client Secret（仅保存到服务端）'}
+                  autoComplete="new-password"
                   className="w-full px-3 py-2 text-xs border border-zinc-200 dark:border-zinc-800 rounded bg-white dark:bg-zinc-900 text-brand-on-surface focus:outline-none focus:ring-1 focus:ring-brand-primary font-mono"
                 />
               </div>
@@ -991,12 +988,21 @@ export default function SettingsTab({
             <button
               type="button"
               onClick={() => {
+                // 非密钥配置项可本地暂存（演示）；生产应整体提交服务端
                 localStorage.setItem('asteroid-sso-enabled', ssoEnabled ? 'true' : 'false');
                 localStorage.setItem('asteroid-sso-provider', ssoProvider);
                 localStorage.setItem('asteroid-sso-issuer', ssoIssuer);
                 localStorage.setItem('asteroid-sso-client-id', ssoClientId);
-                localStorage.setItem('asteroid-sso-client-secret', ssoClientSecret);
                 localStorage.setItem('asteroid-sso-enforced', ssoEnforced ? 'true' : 'false');
+
+                // 客户端密钥：只提交、不落 localStorage；提交后清空内存并标记"已配置"
+                if (ssoClientSecret) {
+                  // 生产：此处应 POST 到服务端加密保管，例如
+                  // await fetch('/api/settings/sso-secret', { method:'PUT', credentials:'include', body: JSON.stringify({ clientSecret: ssoClientSecret }) });
+                  localStorage.setItem('asteroid-sso-secret-set', 'true');
+                  setSsoSecretConfigured(true);
+                  setSsoClientSecret('');
+                }
                 onShowNotification('🎉 身份凭信 SSO 及服务提供方配置更新已成功保存并立即上线生效！', 'success');
               }}
               className="px-3.5 py-1.5 rounded bg-black dark:bg-zinc-100 hover:bg-zinc-800 dark:hover:bg-zinc-200 text-white dark:text-zinc-900 text-xs font-semibold cursor-pointer shadow-sm transition-colors"
