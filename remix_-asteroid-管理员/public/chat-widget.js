@@ -383,11 +383,14 @@
 };
   // Generate / Retrieve unique sessionToken
   let sessionToken = localStorage.getItem('asteroid_chat_session');
-  if (!sessionToken) {
-    sessionToken = 'sess_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    localStorage.setItem('asteroid_chat_session', sessionToken);
-  }
-
+if (!sessionToken) {
+  const rnd = (self.crypto && crypto.randomUUID)
+    ? crypto.randomUUID()
+    : Array.from(crypto.getRandomValues(new Uint8Array(16)))
+        .map(b => b.toString(16).padStart(2, '0')).join('');
+  sessionToken = 'sess_' + rnd;
+  localStorage.setItem('asteroid_chat_session', sessionToken);
+}
   // To prevent showing the same message multiple times when polling
   const displayedMessageIds = new Set();
   let pollInterval = null;
