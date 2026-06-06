@@ -3,7 +3,7 @@ import {
   MessageSquare, Send, User, Mail, Clock,
   AlertCircle, RefreshCw, Search, MessageCircle
 } from 'lucide-react';
-import { CHAT_API } from '@/lib/config';
+import { CHAT_API } from '../lib/config';
 
 interface SupportTabProps {
   onShowNotification: (message: string, type: 'success' | 'info' | 'error') => void;
